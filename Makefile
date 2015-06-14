@@ -15,7 +15,7 @@ OCB := ocamlbuild $(OCBFLAGS)
 target := step2_eval
 
 .PHONY: all debug clean top
-all: $(target).native
+all: $(target).cmxa $(target).native
 debug: all $(target).cma
 
 %.cma:
