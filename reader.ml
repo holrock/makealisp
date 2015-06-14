@@ -27,12 +27,14 @@ let read_form = function
 		| Ok _ as s, _ -> s)
       | _ -> Ok (read_atom x)
 
+(*
 let rec sl = function
   | [] -> print_endline ""
   | x::xs -> Printf.printf "[%s]\n" x;
 	     sl xs
+ *)
 
 let read_str str =
   match tokenizer str with
-  | Ok list -> sl list; read_form list
+  | Ok list -> read_form list
   | Error _ as e-> e
