@@ -1,14 +1,33 @@
-.PHONY: all clean
-.SUFFIXES: .ml .native
+OCBFLAGS := -use-ocamlfind \
+	-syntax camlp4o \
+	-pkg core \
+	-pkg sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax \
+	-pkg bin_prot.syntax \
+	-pkg re2 \
+	-tag thread \
+	-tag debug \
+	-tag bin_annot \
+	-tag short_paths \
+	-cflags "-w A-4-33-40-41-42-43-34-44" \
+	-cflags -strict-sequence \
 
-SRCS = step0_repl.ml step1_read_print.ml
-NATIVES = $(SRCS:%.ml=%.native)
-LIBS = re2
+OCB := ocamlbuild $(OCBFLAGS)
+target := step2_eval
 
-all: $(NATIVES)
+.PHONY: all debug clean top
+all: $(target).native
+debug: all $(target).cma
+
+%.cma:
+	$(OCB) $@
+%.cmxa:
+	$(OCB) $@
+%.native:
+	$(OCB) $@
 
 clean:
-	$(RM) -rf _build *.native
+	$(OCB) -clean
+	$(RM) src/version.ml*
 
-.ml.native:
-	corebuild -pkg $(LIBS) $@
+top: debug
+	ocaml
